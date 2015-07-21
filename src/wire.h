@@ -25,7 +25,7 @@ class WireBaseEmitter {
             return listeners.begin();
         }
 
-        void RemoveListener(Listener l) {
+        void RemoveListener(ListenerId l) {
             listeners.erase(l);
         }
 
@@ -50,8 +50,6 @@ class WireBaseEmitter {
 template<typename T, typename...Args>
 class WireEmitter: public WireBaseEmitter<T, Args...> {
     public:
-        typedef std::function<void(T)> Callback;
-
         std::list<T> Collect(Args... args) {
             std::list<T> results;
             WireBaseEmitter<T, Args...>::propagate = true;
@@ -65,12 +63,10 @@ class WireEmitter: public WireBaseEmitter<T, Args...> {
 };
 
 template<typename T, typename... Args>
-class Wire: public WireEmitter<T, Args...>
-{};
+class Wire: public WireEmitter<T, Args...> {};
 
 template<typename... Args>
-class Wire<void, Args...>: public WireBaseEmitter<void, Args...>
-{};
+class Wire<void, Args...>: public WireBaseEmitter<void, Args...> {};
 
 
 #endif//WIRE_H__
